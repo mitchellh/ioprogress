@@ -29,10 +29,10 @@ func DrawTerminal(w io.Writer) DrawFunc {
 
 		// Make sure we pad it to the max length we've ever drawn so that
 		// we don't have trailing characters.
-		if len(line) < maxLength {
-			line = fmt.Sprintf(
-				"%s%s", line, strings.Repeat(" ", maxLength-len(line)))
-		}
+		line = fmt.Sprintf(
+			"%s%s",
+			line,
+			strings.Repeat(" ", maxLength-len(line)))
 		maxLength = len(line)
 
 		return line
