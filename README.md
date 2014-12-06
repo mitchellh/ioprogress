@@ -5,6 +5,10 @@ and `io.Writer` that draws progress bars. The primary use case for these
 are for CLI applications but alternate progress bar writers can be supplied
 for alternate environments.
 
+## Example
+
+![Progress](http://g.recordit.co/GO5HxT16QH.gif)
+
 ## Installation
 
 Standard `go get`:
