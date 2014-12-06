@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 )
 
 // DrawFunc is the callback type for drawing progress.
@@ -22,8 +23,19 @@ func init() {
 // DrawTerminal returns a DrawFunc that draws a progress bar to an io.Writer
 // that is assumed to be a terminal (and therefore respects carriage returns).
 func DrawTerminal(w io.Writer) DrawFunc {
+	var maxLength int
 	return DrawTerminalf(w, func(progress, total int64) string {
-		return fmt.Sprintf("%d/%d", progress, total)
+		line := fmt.Sprintf("%d/%d", progress, total)
+
+		// Make sure we pad it to the max length we've ever drawn so that
+		// we don't have trailing characters.
+		if len(line) < maxLength {
+			line = fmt.Sprintf(
+				"%s%s", line, strings.Repeat(" ", maxLength-len(line)))
+		}
+		maxLength = len(line)
+
+		return line
 	})
 }
 
