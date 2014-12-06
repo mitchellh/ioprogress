@@ -30,6 +30,11 @@ type Reader struct {
 // appropriate. The DrawFunc is executed when there is data that is
 // read (progress is made) and at least DrawInterval time has passed.
 func (r *Reader) Read(p []byte) (int, error) {
+	// If we haven't drawn before, initialize the progress bar
+	if r.lastDraw.IsZero() {
+		r.initProgress()
+	}
+
 	// Read from the underlying source
 	n, err := r.Reader.Read(p)
 
@@ -84,6 +89,13 @@ func (r *Reader) finishProgress() {
 		var zeroDraw time.Time
 		r.lastDraw = zeroDraw
 	}
+}
+
+func (r *Reader) initProgress() {
+	var zeroDraw time.Time
+	r.lastDraw = zeroDraw
+	r.drawProgress()
+	r.lastDraw = zeroDraw
 }
 
 func (r *Reader) drawFunc() DrawFunc {
