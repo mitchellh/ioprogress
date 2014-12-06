@@ -65,13 +65,12 @@ func byteUnitStr(n int64) string {
 	var unit string
 	size := float64(n)
 	for i := 1; i < len(byteUnits); i++ {
-		mult := float64(i * 1000)
-		if size < mult {
+		if size < 1000 {
 			unit = byteUnits[i-1]
 			break
 		}
 
-		size = size / mult
+		size = size / 1000
 	}
 
 	return fmt.Sprintf("%.3g %s", size, unit)
