@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"testing"
+	"time"
 )
 
 func TestReader(t *testing.T) {
@@ -18,9 +19,10 @@ func TestReader(t *testing.T) {
 
 	var buf bytes.Buffer
 	r := &Reader{
-		Reader:   testR,
-		Size:     testR.Size(),
-		DrawFunc: DrawTerminal(&buf),
+		Reader:       testR,
+		Size:         testR.Size(),
+		DrawFunc:     DrawTerminal(&buf),
+		DrawInterval: time.Microsecond,
 	}
 	io.Copy(ioutil.Discard, r)
 
@@ -39,6 +41,9 @@ type testReader struct {
 }
 
 func (r *testReader) Read(p []byte) (int, error) {
+	// This is just so that our interval will fire properly
+	time.Sleep(5 * time.Microsecond)
+
 	if r.i == len(r.Data) {
 		return 0, io.EOF
 	}

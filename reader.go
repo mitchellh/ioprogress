@@ -55,8 +55,12 @@ func (r *Reader) Read(p []byte) (int, error) {
 func (r *Reader) drawProgress() {
 	// If we've drawn before, then make sure that the draw interval
 	// has passed before we draw again.
-	if !r.lastDraw.IsZero() && r.DrawInterval > 0 {
-		nextDraw := r.lastDraw.Add(r.DrawInterval)
+	interval := r.DrawInterval
+	if interval == 0 {
+		interval = time.Second
+	}
+	if !r.lastDraw.IsZero() {
+		nextDraw := r.lastDraw.Add(interval)
 		if time.Now().Before(nextDraw) {
 			return
 		}
