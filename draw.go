@@ -23,32 +23,34 @@ func init() {
 // DrawTerminal returns a DrawFunc that draws a progress bar to an io.Writer
 // that is assumed to be a terminal (and therefore respects carriage returns).
 func DrawTerminal(w io.Writer) DrawFunc {
-	var maxLength int
 	return DrawTerminalf(w, func(progress, total int64) string {
-		line := fmt.Sprintf("%d/%d", progress, total)
-
-		// Make sure we pad it to the max length we've ever drawn so that
-		// we don't have trailing characters.
-		line = fmt.Sprintf(
-			"%s%s",
-			line,
-			strings.Repeat(" ", maxLength-len(line)))
-		maxLength = len(line)
-
-		return line
+		return fmt.Sprintf("%d/%d", progress, total)
 	})
 }
 
 // DrawTerminalf returns a DrawFunc that draws a progress bar to an io.Writer
 // that is formatted with the given formatting function.
 func DrawTerminalf(w io.Writer, f DrawTextFormatFunc) DrawFunc {
+	var maxLength int
+
 	return func(progress, total int64) error {
 		if progress == -1 || total == -1 {
 			_, err := fmt.Fprintf(w, "\n")
 			return err
 		}
 
-		_, err := fmt.Fprint(w, f(progress, total)+"\r")
+		// Make sure we pad it to the max length we've ever drawn so that
+		// we don't have trailing characters.
+		line := f(progress, total)
+		if len(line) < maxLength {
+			line = fmt.Sprintf(
+				"%s%s",
+				line,
+				strings.Repeat(" ", maxLength-len(line)))
+		}
+		maxLength = len(line)
+
+		_, err := fmt.Fprint(w, line+"\r")
 		return err
 	}
 }
