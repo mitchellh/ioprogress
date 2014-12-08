@@ -64,7 +64,18 @@ func DrawTextFormatBytes(progress, total int64) string {
 }
 
 // DrawTextFormatBar returns a DrawTextFormatFunc that draws a progress
-// bar with the given width (in characters).
+// bar with the given width (in characters). This can be used in conjunction
+// with another DrawTextFormatFunc to create a progress bar with bytes, for
+// example:
+//
+//     bar := DrawTextFormatBar(20)
+//     func(progress, total int64) string {
+//         return fmt.Sprintf(
+//           "%s %s",
+//           bar(progress, total),
+//           DrawTextFormatBytes(progress, total))
+//     }
+//
 func DrawTextFormatBar(width int64) DrawTextFormatFunc {
 	width -= 2
 
