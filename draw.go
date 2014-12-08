@@ -63,6 +63,20 @@ func DrawTextFormatBytes(progress, total int64) string {
 	return fmt.Sprintf("%s/%s", byteUnitStr(progress), byteUnitStr(total))
 }
 
+// DrawTextFormatBar returns a DrawTextFormatFunc that draws a progress
+// bar with the given width (in characters).
+func DrawTextFormatBar(width int64) DrawTextFormatFunc {
+	width -= 2
+
+	return func(progress, total int64) string {
+		current := int64((float64(progress) / float64(total)) * float64(width))
+		return fmt.Sprintf(
+			"[%s%s]",
+			strings.Repeat("=", int(current)),
+			strings.Repeat(" ", int(width - current)))
+	}
+}
+
 func byteUnitStr(n int64) string {
 	var unit string
 	size := float64(n)

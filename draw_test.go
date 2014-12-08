@@ -23,6 +23,29 @@ func TestDrawTerminal(t *testing.T) {
 	}
 }
 
+func TestDrawTextFormatBar(t *testing.T) {
+	var actual, expected string
+	f := DrawTextFormatBar(10)
+
+	actual = f(5, 10)
+	expected = "[====    ]"
+	if actual != expected {
+		t.Fatalf("bad: %s", actual)
+	}
+
+	actual = f(2, 10)
+	expected = "[=       ]"
+	if actual != expected {
+		t.Fatalf("bad: %s", actual)
+	}
+
+	actual = f(10, 10)
+	expected = "[========]"
+	if actual != expected {
+		t.Fatalf("bad: %s", actual)
+	}
+}
+
 func TestDrawTextFormatBytes(t *testing.T) {
 	cases := []struct{
 		P, T int64
