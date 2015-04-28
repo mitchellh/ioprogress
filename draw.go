@@ -34,7 +34,7 @@ func DrawTerminalf(w io.Writer, f DrawTextFormatFunc) DrawFunc {
 	var maxLength int
 
 	return func(progress, total int64) error {
-		if progress == -1 || total == -1 {
+		if progress == -1 && total == -1 {
 			_, err := fmt.Fprintf(w, "\n")
 			return err
 		}
@@ -84,7 +84,7 @@ func DrawTextFormatBar(width int64) DrawTextFormatFunc {
 		return fmt.Sprintf(
 			"[%s%s]",
 			strings.Repeat("=", int(current)),
-			strings.Repeat(" ", int(width - current)))
+			strings.Repeat(" ", int(width-current)))
 	}
 }
 
