@@ -60,7 +60,7 @@ var byteUnits = []string{"B", "KB", "MB", "GB", "TB", "PB"}
 // DrawTextFormatBytes is a DrawTextFormatFunc that formats the progress
 // and total into human-friendly byte formats.
 func DrawTextFormatBytes(progress, total int64) string {
-	return fmt.Sprintf("%s/%s", byteUnitStr(progress), byteUnitStr(total))
+	return fmt.Sprintf("%s/%s", ByteUnitStr(progress), ByteUnitStr(total))
 }
 
 // DrawTextFormatBar returns a DrawTextFormatFunc that draws a progress
@@ -88,7 +88,8 @@ func DrawTextFormatBar(width int64) DrawTextFormatFunc {
 	}
 }
 
-func byteUnitStr(n int64) string {
+// ByteUnitStr pretty prints a number of bytes.
+func ByteUnitStr(n int64) string {
 	var unit string
 	size := float64(n)
 	for i := 1; i < len(byteUnits); i++ {
