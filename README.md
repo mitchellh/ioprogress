@@ -40,3 +40,5 @@ progressR := &ioprogress.Reader{
 // customizable.
 io.Copy(f, progressR)
 ```
+
+See [example.go](./example.go)
